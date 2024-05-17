@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import './App.css';
 import WeatherIcon from "./WeatherIcon";
+import WeatherDate from "./WeatherDate";
 import axios from 'axios';
 
 
@@ -10,7 +11,7 @@ export default function App(props) {
     let [unit, setUnit] = useState("metric")
 
     function getResponse(response) {
-
+        console.log(response.data)
         setWeatherObject({
             ready: true,
             city: response.data.name,
@@ -19,7 +20,8 @@ export default function App(props) {
             humidity: response.data.main.humidity,
             wind: response.data.wind.speed,
             temperature: response.data.main.temp,
-            icon: response.data.weather[0].icon
+            icon: response.data.weather[0].icon,
+            date: response.data.dt
         })
     }
     function handleForm(event) {
@@ -81,7 +83,7 @@ export default function App(props) {
                             <h1> {weatherObject.city}</h1>
                             <ul className="description">
                                 <li>
-                                    Friday 18:00
+                                    <WeatherDate date={weatherObject.date}/>
                                 </li>
                                 <li>
                                     {weatherObject.description}
