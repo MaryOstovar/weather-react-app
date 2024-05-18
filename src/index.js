@@ -15,7 +15,7 @@ root.render(
             <small>
                 <hr/>
                 <a
-                    href="https://github.com/maryost1998/Weather-app-React"
+                    href="https://github.com/maryost1998/weather-react-app"
                     id="code-source"
                     target="_blank"
                     rel="noreferrer"
