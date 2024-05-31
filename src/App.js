@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import './App.css';
 import WeatherIcon from "./WeatherIcon";
 import WeatherDate from "./WeatherDate";
+import WeatherForecast from "./WeatherForecast";
 import axios from 'axios';
 
 
@@ -11,9 +12,10 @@ export default function App(props) {
     let [unit, setUnit] = useState("metric")
 
     function getResponse(response) {
-        console.log(response.data)
+console.log(response)
         setWeatherObject({
             ready: true,
+            coordinates: response.data.coord,
             city: response.data.name,
             description: response.data.weather[0].description,
             precipitation: response.data.cod,
@@ -24,12 +26,14 @@ export default function App(props) {
             date: response.data.dt
         })
     }
+
     function handleForm(event) {
         event.preventDefault();
         search();
     }
+
     function handleCityName(event) {
-        console.log(city)
+
         setCity(event.target.value)
     }
 
@@ -38,13 +42,15 @@ export default function App(props) {
         let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=${unit}`;
         axios.get(url).then(getResponse);
     }
-    function handleFahrenheitTemp(event){
+
+    function handleFahrenheitTemp(event) {
         event.preventDefault();
         setUnit("imperial")
         search();
 
     }
-    function handleCelsiusTemp(event){
+
+    function handleCelsiusTemp(event) {
         event.preventDefault();
         setUnit("metric")
         search();
@@ -56,18 +62,21 @@ export default function App(props) {
             <div className="App">
                 <div className="container  p-4">
                     <form className="input-group d-flex" onSubmit={handleForm}>
-                        <input className="form-control me-2" type="search" onChange={handleCityName} placeholder="type a city"/>
-                        <input className=" btn btn-light " type="submit" value="search" />
+                        <input className="form-control me-2" type="search" onChange={handleCityName}
+                               placeholder="type a city"/>
+                        <input className=" btn btn-light " type="submit" value="search"/>
                     </form>
 
                     <div className="row mt-5">
                         <div className="col-8">
                             <div className="row">
                                 <div className="col-6  ">
-                                  < WeatherIcon icon={weatherObject.icon}/>
+                                    < WeatherIcon icon={weatherObject.icon} size={100}/>
 
                                     <div className="temperature  ">{Math.round(weatherObject.temperature)}</div>
-                                    <span className="units"><a className="temp-unit"  href="/" onClick={handleCelsiusTemp}>°C</a>|<a className="temp-unit" href="/" onClick={handleFahrenheitTemp}>°F</a></span>
+                                    <span className="units"><a className="temp-unit" href="/"
+                                                               onClick={handleCelsiusTemp}>°C</a>|<a
+                                        className="temp-unit" href="/" onClick={handleFahrenheitTemp}>°F</a></span>
                                 </div>
                                 <div className="col-6 weather-details ">
                                     <ul>
@@ -93,11 +102,11 @@ export default function App(props) {
 
                         </div>
                     </div>
+                    <WeatherForecast city={weatherObject.city} coords={weatherObject.coordinates}/>
                 </div>
             </div>
         );
     } else {
-
         search()
         return <h1> Loading ..</h1>
     }
